@@ -1,11 +1,42 @@
-from pyspark import SparkConf, SparkContext
+import requests
+import json, time
 
-APP_NAME = ""
-MASTER_URL = "local[*]"
+host = 'http://localhost:8003'
 
-conf = SparkConf().setAppName(APP_NAME)
-conf = conf.setMaster(MASTER_URL)
-spark_context = SparkContext(conf=conf)
 
-num = spark_context.parallelize([1, 2, 3, 4]).count()
-print(num)
+def test_sync_add():
+    params = {
+        'x': 1,
+        'y': 2
+    }
+    response = requests.post(host + '/sync/add/', data=params)
+    print(response.text)
+
+
+def test_submit_add():
+    params = {
+        'x': 1,
+        'y': 2
+    }
+    response = requests.post(host + '/submit/add/', data=params)
+    print(response.text)
+    result = json.loads(response.text)
+    return result['token']
+
+
+def test_result_add(token):
+    params = {
+        'token': token
+    }
+    response = requests.post(host + '/result/add/', data=params)
+    print(response.text)
+
+
+def test_add():
+    test_sync_add()
+    token = test_submit_add()
+    test_result_add(token)
+
+
+if __name__ == '__main__':
+    test_add()

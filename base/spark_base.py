@@ -6,3 +6,7 @@ MASTER_URL = "local[*]"
 conf = SparkConf().setAppName(APP_NAME)
 conf = conf.setMaster(MASTER_URL)
 spark_context = SparkContext(conf=conf)
+
+if __name__ == '__main__':
+    num = spark_context.parallelize([1, 2, 3, 4]).count()
+    print(num)
