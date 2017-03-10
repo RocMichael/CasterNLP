@@ -1,5 +1,5 @@
 from pyspark import SparkConf, SparkContext
-from pyspark.sql import SQLContext, SparkSession
+from pyspark.sql import SQLContext, SparkSession, Row
 
 APP_NAME = "NaaS"
 MASTER_URL = "local[*]"

@@ -11,7 +11,7 @@ class SparkDAGSegger:
     def __init__(self, context=None, session=None):
         self.context = context
         self.session = session
-        self.word_dict = None  # (word:num) dataframe
+        self.word_dict = None  # (word, num) dataframe
         self.raw_data = None  # raw data rdd
 
     def read(self, filename):
