@@ -9,3 +9,7 @@ class AddForm(Form):
 
 class ResultForm(Form):
     token = StringField('token', [validators.required()])
+
+
+class TextForm(Form):
+    text = StringField('text', [validators.required()])

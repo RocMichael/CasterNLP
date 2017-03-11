@@ -1,7 +1,9 @@
 from flask import request, render_template
 from flask import Flask
 
-from form import AddForm, ResultForm
+from native.segment import cut
+
+from form import AddForm, ResultForm, TextForm
 from base.redis_base import make_token, get_result
 import task
 
@@ -53,8 +55,8 @@ def submit_add():
     return json.dumps(response)
 
 
-@app.route('/result/add/', methods=['POST'])
-def result_add():
+@app.route('/result/', methods=['POST'])
+def get_result():
     response = {}
     form = ResultForm(request.form)
     if not form.validate():
@@ -64,8 +66,45 @@ def result_add():
 
     token = data['token']
     result = get_result(token)
+    if result is None:
+        response['status'] = 'pending'
+    else:
+        response['status'] = 'ok'
+        response['result'] = result
+    return json.dumps(response)
+
+
+@app.route('/sync/seg/', methods=['POST'])
+def sync_seg():
+    response = {}
+    form = TextForm(request.form)
+    if not form.validate():
+        response['status'] = 'ERROR_INVALID_FORM'
+        return response
+    data = form.data
+
+    text = data['text']
+    result = cut(text)
+
     response['status'] = 'ok'
     response['result'] = result
     return json.dumps(response)
 
+
+@app.route('/submit/seg/', methods=['POST'])
+def submit_seg():
+    response = {}
+    form = TextForm(request.form)
+    if not form.validate():
+        response['status'] = 'ERROR_INVALID_FORM'
+        return response
+    data = form.data
+
+    text = data['text']
+    token = make_token('seg')
+    task.async_seg.delay(token, text)
+
+    response['status'] = 'ok'
+    response['token'] = token
+    return json.dumps(response)
 

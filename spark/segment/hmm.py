@@ -142,8 +142,11 @@ class SparkHMMSegger:
         return path[state]
 
     def cut(self, sentence):
-        tags = self.predict(sentence)
-        return cut_sent(sentence, tags)
+        try:
+            tags = self.predict(sentence)
+            return cut_sent(sentence, tags)
+        except:
+            return sentence
 
 
 if __name__ == '__main__':
