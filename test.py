@@ -63,4 +63,4 @@ def test_seg():
 
 
 if __name__ == '__main__':
-    test_result('seg23829521279')
+    test_seg()

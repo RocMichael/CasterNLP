@@ -56,7 +56,7 @@ def submit_add():
 
 
 @app.route('/result/', methods=['POST'])
-def get_result():
+def fetch_result():
     response = {}
     form = ResultForm(request.form)
     if not form.validate():

@@ -62,10 +62,12 @@ def get_result_reserve(token):
     return redis_session.get(token)
 
 
-def get_result(token):
+def get_result_destroy(token):
     result = redis_session.get(token)
     redis_session.pop(token)
     return result
+
+get_result = get_result_reserve
 
 if __name__ == '__main__':
     token = cache_result("add", 2)
