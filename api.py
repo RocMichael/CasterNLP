@@ -2,6 +2,7 @@ from flask import request, render_template
 from flask import Flask
 
 from SaberNLP.segment import cut
+from SaberNLP.recognize import tag
 
 from form import AddForm, ResultForm, TextForm
 from base.redis_base import make_token, get_result
@@ -108,3 +109,37 @@ def submit_seg():
     response['token'] = token
     return json.dumps(response)
 
+
+@app.route('/sync/tag/', methods=['POST'])
+def sync_tag():
+    response = {}
+    form = TextForm(request.form)
+    if not form.validate():
+        response['status'] = 'ERROR_INVALID_FORM'
+        return response
+    data = form.data
+
+    text = data['text']
+    result = tag(text)
+
+    response['status'] = 'ok'
+    response['result'] = result
+    return json.dumps(response)
+
+
+@app.route('/submit/tag/', methods=['POST'])
+def submit_tag():
+    response = {}
+    form = TextForm(request.form)
+    if not form.validate():
+        response['status'] = 'ERROR_INVALID_FORM'
+        return response
+    data = form.data
+
+    text = data['text']
+    token = make_token('tag')
+    task.async_tag.delay(token, text)
+
+    response['status'] = 'ok'
+    response['token'] = token
+    return json.dumps(response)
