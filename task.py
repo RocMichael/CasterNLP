@@ -1,7 +1,7 @@
 from base.redis_base import redis_session
 from celery import Celery
 
-from native.segment import cut
+from SaberNLP.segment import cut
 
 app = Celery('task', broker='redis://127.0.0.1:6379/0', backend='redis://127.0.0.1:6379/1')
 

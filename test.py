@@ -59,6 +59,7 @@ def test_submit_seg():
 def test_seg():
     test_sync_seg()
     token = test_submit_seg()
+    time.sleep(0.01)
     test_result(token)
 
 

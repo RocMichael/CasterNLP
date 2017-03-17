@@ -1,7 +1,7 @@
 from flask import request, render_template
 from flask import Flask
 
-from native.segment import cut
+from SaberNLP.segment import cut
 
 from form import AddForm, ResultForm, TextForm
 from base.redis_base import make_token, get_result
